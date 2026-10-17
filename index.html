@@ -3,42 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Vietnamese Women's Day – October 20th! 💕</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Dancing+Script:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome CDN for cute icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Canvas Confetti CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+    <title>Thiệp Chúc Mừng 20/10 💖</title>
     <style>
-        /* Custom Animations & Styling */
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #ffd1dc 0%, #fbe4ff 50%, #e2d4ff 100%);
+        :root {
+            --pink-main: #ff6b81;
+            --pink-soft: #ffb6c1;
+            --purple-glow: #e0a3ff;
+            --bg-dark: #12001a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Cho phép cuộn trang tự do và mượt mà */
+        html, body {
+            width: 100%;
             min-height: 100vh;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, #2a0036 0%, #0d0014 100%);
+            color: #fff;
             overflow-x: hidden;
-            user-select: none;
+            overflow-y: auto;
+            position: relative;
         }
 
-        .font-dancing {
-            font-family: 'Dancing Script', cursive;
-        }
-
-        .font-comfortaa {
-            font-family: 'Comfortaa', cursive;
-        }
-
-        /* Sparkle & Float Canvas Container */
-        #bg-canvas {
+        /* Lớp nền hiệu ứng lấp lánh nhẹ nhàng */
+        #sparkle-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -48,589 +43,387 @@
             z-index: 1;
         }
 
-        /* Glassmorphism Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.65);
+        .container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Màn hình khóa Passcode */
+        .lock-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            border-radius: 24px;
+            padding: 30px 25px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.2);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .lock-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+            display: inline-block;
+        }
+
+        .lock-title {
+            font-size: 1.4rem;
+            color: #ffa4b6;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .pass-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #ff6b81;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            margin: 15px 0;
+            transition: all 0.3s;
+        }
+
+        .pass-input:focus {
+            box-shadow: 0 0 15px rgba(255, 107, 129, 0.6);
+            border-color: #ff9ebb;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(45deg, #ff6b81, #ff8e53);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .unlock-btn:active {
+            transform: scale(0.95);
+        }
+
+        .error-msg {
+            color: #ff4757;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        /* Giao diện Thiệp Chính */
+        .card-wrapper {
+            display: none;
+            width: 100%;
+            max-width: 650px;
+            margin: 20px auto;
+            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .main-card {
+            background: rgba(30, 10, 40, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 15px 35px rgba(255, 154, 162, 0.35),
-                        0 0 25px rgba(255, 223, 186, 0.5);
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            border-radius: 28px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.25);
+            text-align: center;
+            position: relative;
         }
 
-        .glass-card-glow {
-            box-shadow: 0 0 30px rgba(255, 182, 193, 0.8),
-                        0 0 60px rgba(221, 160, 221, 0.5);
+        .bears-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
         }
 
-        /* Shake animation for wrong password */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-12px) rotate(-3deg); }
-            40%, 80% { transform: translateX(12px) rotate(3deg); }
+        .bear-item {
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            user-select: none;
         }
 
-        .animate-shake {
-            animation: shake 0.5s ease-in-out;
+        .bear-item:hover, .bear-item:active {
+            transform: scale(1.3) rotate(10deg);
         }
 
-        /* Pulse glowing button */
-        @keyframes pulseGlow {
-            0%, 100% {
-                box-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 0 30px rgba(255, 182, 193, 0.4);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(255, 105, 180, 0.9), 0 0 45px rgba(255, 182, 193, 0.7);
-                transform: scale(1.03);
-            }
+        .card-header {
+            font-size: 1.8rem;
+            color: #ff9ebb;
+            text-shadow: 0 0 10px rgba(255, 158, 187, 0.5);
+            margin-bottom: 20px;
+            font-weight: 700;
         }
 
-        .btn-glow {
-            animation: pulseGlow 2s infinite;
+        .card-body {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #f3e5f5;
+            text-align: justify;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #ff6b81;
         }
 
-        /* Floating elements on screen */
-        .floating-item {
-            position: absolute;
+        .card-body p {
+            margin-bottom: 12px;
+            text-indent: 15px;
+        }
+
+        .card-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .interactive-hint {
+            font-size: 0.85rem;
+            color: #e0a3ff;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 107, 129, 0.8);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Floating Items nhẹ nhẹ không gây lag */
+        .floating-heart {
+            position: fixed;
             pointer-events: none;
-            animation: floatUp linear infinite;
+            z-index: 5;
+            animation: floatUp 4s linear forwards;
+            will-change: transform, opacity;
+        }
+
+        /* Keyframes Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.9;
-            }
-            90% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg) scale(1.1);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
         }
 
-        /* 3D Envelope & Card Styling */
-        .card-perspective {
-            perspective: 1200px;
-        }
-
-        .card-3d {
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-
-        .card-3d.open {
-            transform: rotateY(180deg);
-        }
-
-        /* Cute Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #ffe3ec;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff85a1;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff5c8a;
+        /* Responsive cho màn hình điện thoại nhỏ */
+        @media (max-width: 480px) {
+            .main-card { padding: 25px 18px; }
+            .card-header { font-size: 1.5rem; }
+            .card-body { font-size: 0.98rem; padding: 15px; }
+            .bears-row { font-size: 2rem; }
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-3 sm:p-6 min-h-screen relative overflow-hidden">
+<body>
 
-    <!-- Background Sparkle & Floating Elements Canvas -->
-    <canvas id="bg-canvas"></canvas>
+    <!-- Canvas hạt lấp lánh nhẹ -->
+    <canvas id="sparkle-canvas"></canvas>
 
-    <!-- Interactive Spawn Layer for Floating Click Effects -->
-    <div id="click-spawn-layer" class="fixed inset-0 pointer-events-none z-20"></div>
-
-    <!-- Background Music Audio (Lo-fi Soft Piano Romantic Track) -->
+    <!-- Nút Bật/Tắt Nhạc -->
+    <button class="music-control" id="music-btn" title="Bật/Tắt Nhạc">🎵</button>
     <audio id="bg-music" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=sweet-love-111663.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-sunlight-600.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Top Music & Interactive Controls (Visible After Unlocking) -->
-    <div id="top-controls" class="fixed top-4 right-4 z-40 flex items-center gap-2 opacity-0 transition-opacity duration-700 pointer-events-none">
-        <button id="spawn-btn" onclick="spawnBurst()" class="bg-white/80 hover:bg-white text-pink-600 font-bold p-3 rounded-full shadow-lg border border-pink-200 transition-all transform active:scale-95 flex items-center gap-2 text-sm sm:text-base">
-            <span class="text-xl">🧸</span> <span class="hidden sm:inline">Thả Yêu Thương</span>
-        </button>
-        <button id="music-btn" onclick="toggleMusic()" class="bg-white/80 hover:bg-white text-pink-600 font-bold p-3 rounded-full shadow-lg border border-pink-200 transition-all transform active:scale-95 flex items-center gap-2 text-sm sm:text-base">
-            <i id="music-icon" class="fas fa-music text-lg animate-spin" style="animation-duration: 3s;"></i>
-            <span id="music-text" class="hidden sm:inline">Nhạc Tắt</span>
-        </button>
-    </div>
-
-    <!-- MAIN CONTAINER -->
-    <div class="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center justify-center">
-
-        <!-- 1. LOCK SCREEN CONTAINER -->
-        <div id="lock-screen" class="w-full max-w-md glass-card glass-card-glow rounded-3xl p-6 sm:p-8 text-center transition-all duration-700 transform scale-100">
-            <!-- Cute Animated Bear Header -->
-            <div class="relative inline-block mb-4">
-                <div class="text-6xl sm:text-7xl animate-bounce" style="animation-duration: 2s;">🧸</div>
-                <div class="absolute -top-1 -right-2 text-2xl animate-pulse">✨</div>
-                <div class="absolute -bottom-1 -left-2 text-2xl animate-pulse">💖</div>
-            </div>
-
-            <h1 class="text-2xl sm:text-3xl font-bold text-pink-700 mb-2 font-comfortaa">
-                Thiệp Yêu Thương 20/10
-            </h1>
-            <p class="text-gray-600 text-sm sm:text-base mb-6">
-                Nhập mật khẩu ngọt ngào để mở khóa món quà bí mật nhé! 💕
-            </p>
-
-            <!-- Password Input Form -->
-            <div class="space-y-4">
-                <div class="relative">
-                    <input type="password" id="password-input" placeholder="Nhập mật khẩu..." 
-                           class="w-full px-5 py-3.5 rounded-2xl border-2 border-pink-300 focus:border-pink-500 focus:outline-none text-center text-lg sm:text-xl font-bold text-pink-600 bg-white/90 shadow-inner transition-all placeholder-pink-300 tracking-widest"
-                           onkeypress="handleKeyPress(event)">
-                    <button onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-pink-400 hover:text-pink-600">
-                        <i id="eye-icon" class="fas fa-eye"></i>
-                    </button>
-                </div>
-
-                <!-- Password Hints -->
-                <div class="flex items-center justify-center gap-2 text-xs sm:text-sm text-pink-500 font-semibold bg-pink-100/60 py-2 px-3 rounded-xl">
-                    <i class="fas fa-lightbulb text-yellow-500"></i>
-                    <span>Gợi ý: <b>2010</b> hoặc <b>yeuthuong</b></span>
-                </div>
-
-                <!-- Error Alert Box -->
-                <div id="error-msg" class="hidden text-pink-600 font-bold text-sm bg-pink-200/80 py-2.5 px-4 rounded-xl border border-pink-300 transition-all">
-                    <!-- Dynamic error text will be set here -->
-                </div>
-
-                <!-- Unlock Button -->
-                <button onclick="checkPassword()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400 text-white font-bold text-lg shadow-lg hover:opacity-95 active:scale-95 transition-all btn-glow flex items-center justify-center gap-2">
-                    <i class="fas fa-heart text-pink-100 animate-ping"></i>
-                    <span>Mở Thiệp Ngay</span>
-                    <i class="fas fa-sparkles text-yellow-200"></i>
-                </button>
-            </div>
+    <div class="container">
+        <!-- 1. MÀN HÌNH KHÓA -->
+        <div class="lock-card" id="lock-screen">
+            <div class="lock-icon">🔒🧸</div>
+            <h2 class="lock-title">Thiệp 20/10 Bí Mật</h2>
+            <p style="font-size:0.9rem; color:#ccc;">Nhập mật khẩu để mở thiệp lấp lánh nhé!</p>
+            <input type="password" id="pass-input" class="pass-input" placeholder="Nhập mật khẩu..." autocomplete="off">
+            <br>
+            <button class="unlock-btn" onclick="checkPassword()">Mở Thiệp 💖</button>
+            <div class="error-msg" id="error-msg"></div>
         </div>
 
-
-        <!-- 2. GREETING CARD SCREEN (Hidden initially) -->
-        <div id="card-screen" class="hidden w-full transition-all duration-1000 transform opacity-0 scale-95 flex flex-col items-center">
-            
-            <!-- Envelope / Decorative Banner Header -->
-            <div class="w-full text-center mb-4">
-                <span class="inline-block px-4 py-1.5 bg-white/80 rounded-full text-pink-600 font-bold text-sm shadow-md border border-pink-200 mb-2">
-                    🌸 Happy Vietnamese Women's Day 🌸
-                </span>
-                <h2 class="text-3xl sm:text-5xl font-bold font-dancing text-pink-700 drop-shadow-md">
-                    Chúc Mừng Ngày 20/10 Lấp Lánh!
-                </h2>
-            </div>
-
-            <!-- Card Box with Glassmorphism -->
-            <div class="w-full glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border-2 border-white shadow-2xl">
-                
-                <!-- Corner Bear Decorations -->
-                <div class="absolute -top-3 -left-3 text-4xl sm:text-5xl transform -rotate-12 select-none">🧸🌸</div>
-                <div class="absolute -top-3 -right-3 text-4xl sm:text-5xl transform rotate-12 select-none">🎀🧸</div>
-                <div class="absolute -bottom-3 -left-3 text-4xl sm:text-5xl transform rotate-12 select-none">🧸💖</div>
-                <div class="absolute -bottom-3 -right-3 text-4xl sm:text-5xl transform -rotate-12 select-none">✨🧸</div>
-
-                <!-- Main Greeting Letter Content -->
-                <div class="relative z-10 my-4 text-gray-800 leading-relaxed text-base sm:text-lg">
-                    
-                    <div class="text-center mb-6">
-                        <div class="inline-flex items-center justify-center gap-2 text-pink-500 font-semibold text-lg font-comfortaa">
-                            <span>✨</span>
-                            <span>Gửi người phụ nữ tuyệt vời nhất</span>
-                            <span>✨</span>
-                        </div>
-                    </div>
-
-                    <!-- Heartwarming Romantic Letter -->
-                    <div class="space-y-4 font-medium text-gray-700 text-justify sm:text-left bg-white/60 p-5 sm:p-7 rounded-2xl shadow-inner border border-pink-100">
-                        <p class="first-letter:text-4xl first-letter:font-bold first-letter:text-pink-500 first-letter:float-left first-letter:mr-2">
-                            Nhân ngày Phụ nữ Việt Nam 20/10, chúc em (hoặc người thương của anh) luôn ngập tràn niềm vui, nụ cười lúc nào cũng rạng rỡ và lấp lánh như những ngôi sao trên bầu trời đêm! ✨
-                        </p>
-                        <p>
-                            Cảm ơn em vì đã xuất hiện, mang đến sự ấm áp, dịu dàng và muôn vàn màu sắc ngọt ngào như những chú gấu bông dễ thương này. Chúc em luôn xinh đẹp, tự tin, hạnh phúc và thành công trên con đường mình đã chọn.
-                        </p>
-                        <p class="text-pink-600 font-semibold text-center py-2">
-                            💖 "Mong rằng mỗi ngày trôi qua với em đều tràn ngập yêu thương và những điều kỳ diệu nhất!" 💖
-                        </p>
-                    </div>
-
-                    <!-- Interactive Colorful Bear Row -->
-                    <div class="my-6 text-center">
-                        <p class="text-xs sm:text-sm text-pink-500 font-semibold mb-3">Chạm vào các chú gấu bông để nhận quà may mắn nhé!</p>
-                        <div class="flex justify-center items-center gap-3 sm:gap-6 text-3xl sm:text-4xl">
-                            <button onclick="bearClick('Hồng Ngọt Ngào - Chúc em luôn xinh đẹp!', '🌸')" class="hover:scale-125 transition-transform cursor-pointer p-2 rounded-xl bg-pink-100/80 hover:bg-pink-200">🩷</button>
-                            <button onclick="bearClick('Tím Mộng Mơ - Chúc em luôn hạnh phúc!', '🔮')" class="hover:scale-125 transition-transform cursor-pointer p-2 rounded-xl bg-purple-100/80 hover:bg-purple-200">💜</button>
-                            <button onclick="bearClick('Vàng Nắng Mới - Chúc em luôn may mắn!', '⭐')" class="hover:scale-125 transition-transform cursor-pointer p-2 rounded-xl bg-amber-100/80 hover:bg-amber-200">💛</button>
-                            <button onclick="bearClick('Xanh Hy Vọng - Chúc em luôn bình an!', '🌿')" class="hover:scale-125 transition-transform cursor-pointer p-2 rounded-xl bg-teal-100/80 hover:bg-teal-200">🩵</button>
-                            <button onclick="bearClick('Nâu Ấm Áp - Chúc em luôn được yêu thương!', '🧸')" class="hover:scale-125 transition-transform cursor-pointer p-2 rounded-xl bg-orange-100/80 hover:bg-orange-200">🤎</button>
-                        </div>
-                    </div>
-
-                    <!-- Footer Signature -->
-                    <div class="text-right mt-6 pr-2">
-                        <p class="text-sm text-pink-400">Gửi trọn yêu thương,</p>
-                        <p class="text-2xl font-dancing font-bold text-pink-600">Forever With Love 💕</p>
-                    </div>
+        <!-- 2. THIỆP CHÍNH (XUẤT HIỆN SAU KHÓA) -->
+        <div class="card-wrapper" id="card-screen">
+            <div class="main-card">
+                <div class="bears-row">
+                    <span class="bear-item" onclick="popMessage('Yêu em nhiều lắm! 💕')">🧸</span>
+                    <span class="bear-item" onclick="popMessage('Em là điều tuyệt vời nhất! ✨')">🐻</span>
+                    <span class="bear-item" onclick="popMessage('20/10 thật hạnh phúc nhé! 🌸')">🧸</span>
+                    <span class="bear-item" onclick="popMessage('Luôn mỉm cười rạng rỡ nha! 💖')">🐻‍❄️</span>
                 </div>
 
-                <!-- Action Button inside Card -->
-                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
-                    <button onclick="spawnBurst()" class="w-full sm:w-auto py-3 px-6 rounded-2xl bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2">
-                        <span>🎉 Thả Pháo Hoa Trái Tim</span>
-                    </button>
-                    <button onclick="replayGreeting()" class="w-full sm:w-auto py-3 px-6 rounded-2xl bg-white/80 border border-pink-300 text-pink-600 font-bold text-base shadow-md hover:bg-pink-50 active:scale-95 transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-redo-alt"></i>
-                        <span>Xem Lại Hiệu Ứng</span>
-                    </button>
+                <h1 class="card-header">Gửi Người Con Gái Anh Yêu ❤️</h1>
+
+                <div class="card-body">
+                    <p>Nhân ngày Phụ Nữ Việt Nam 20/10, chúc em luôn rạng rỡ như những bông hoa, hạnh phúc như những điều ngọt ngào nhất và luôn giữ trên môi nụ cười rạng rỡ.</p>
+                    <p>Cảm ơn em vì đã xuất hiện và làm cho cuộc sống của anh trở nên tràn ngập màu sắc và lấp lánh hơn. Mong rằng mỗi ngày trôi qua, em đều cảm nhận được trọn vẹn sự yêu thương và trân trọng!</p>
+                    <p>Chúc em một ngày 20/10 thật đặc biệt, nhận được thật nhiều quà và luôn xinh đẹp tuyệt vời! ✨💖</p>
                 </div>
 
+                <div class="interactive-hint">💡 Bấm vào các chú gấu bông phía trên để thấy điều bất ngờ!</div>
             </div>
-        </div>
-
-    </div>
-
-    <!-- POPUP MODAL FOR BEAR MESSAGES -->
-    <div id="msg-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border-2 border-pink-300 transform scale-90 transition-transform duration-300" id="msg-modal-box">
-            <div id="modal-icon" class="text-5xl mb-3">🧸</div>
-            <h3 id="modal-title" class="text-xl font-bold text-pink-600 mb-2 font-comfortaa">Lời Chúc Tới Bạn</h3>
-            <p id="modal-text" class="text-gray-700 text-base mb-6 font-medium">Chúc em có một ngày 20/10 thật tuyệt vời!</p>
-            <button onclick="closeModal()" class="py-2.5 px-6 rounded-xl bg-pink-500 text-white font-bold shadow-md hover:bg-pink-600 active:scale-95 transition-all">
-                Đón Nhận 💕
-            </button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- CONSTANTS & CONFIGS ---
-        const VALID_PASSWORDS = ["2010", "20/10", "yeuthuong", "20-10"];
-        let isMusicPlaying = false;
-        const bgMusic = document.getElementById('bg-music');
+        // Mật khẩu đúng (Chữ thường)
+        const VALID_PASSWORDS = ['2010', 'yeuthuong', 'iloveyou', '1020'];
 
-        // --- BACKGROUND CANVAS ANIMATION (Sparkles & Floating items) ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
+        function checkPassword() {
+            const input = document.getElementById('pass-input').value.trim().toLowerCase();
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (VALID_PASSWORDS.includes(input) || input === '20/10') {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('card-screen').style.display = 'block';
+                
+                // Tự động phát nhạc khi mở khóa thành công
+                const music = document.getElementById('bg-music');
+                music.play().catch(() => console.log("Cần tương tác để phát nhạc"));
+                
+                // Bắn hiệu ứng trái tim chào mừng
+                createHeartBurst();
+            } else {
+                errorMsg.innerText = 'Mật khẩu chưa đúng rồi, thử lại nha! (Gợi ý: 2010)';
+            }
+        }
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+        // Nhấn Enter để mở
+        document.getElementById('pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
         });
 
-        // Particle System for Background Sparkles
-        const particles = [];
-        const particleCount = 45;
+        // Xử lý nút bật/tắt nhạc
+        const musicBtn = document.getElementById('music-btn');
+        const bgMusic = document.getElementById('bg-music');
+        let isPlaying = false;
 
-        class SparkleParticle {
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.innerText = '🔇';
+            } else {
+                bgMusic.play();
+                musicBtn.innerText = '🎵';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Thông báo khi bấm vào gấu
+        function popMessage(msg) {
+            alert(msg);
+            createHeartBurst();
+        }
+
+        // Tạo trái tim bay nhẹ không gây lag
+        function createHeartBurst() {
+            const symbols = ['💖', '🌸', '✨', '💕', '🧸'];
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                    heart.style.left = Math.random() * 90 + 5 + 'vw';
+                    heart.style.bottom = '0px';
+                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 150);
+            }
+        }
+
+        // Canvas hạt lấp lánh (Sparkles) nhẹ tối ưu GPU
+        const canvas = document.getElementById('sparkle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
             constructor() {
                 this.reset();
             }
-
             reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = -Math.random() * 0.8 - 0.2;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * 0.5 + 0.2;
                 this.opacity = Math.random() * 0.8 + 0.2;
-                this.color = `hsla(${Math.random() * 50 + 330}, 100%, 75%, ${this.opacity})`;
             }
-
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.y < 0 || this.x < 0 || this.x > width) {
-                    this.reset();
-                    this.y = height + 10;
-                }
+                this.y -= this.speedY;
+                if (this.y < 0) this.reset();
             }
-
             draw() {
+                ctx.fillStyle = `rgba(255, 182, 193, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#ffb6c1';
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new SparkleParticle());
+        // Số lượng hạt giới hạn (40 hạt) để không bị lag máy
+        for (let i = 0; i < 40; i++) {
+            particles.push(new Particle());
         }
 
-        function animateCanvas() {
-            ctx.clearRect(0, 0, width, height);
+        function animateSparkles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
-            requestAnimationFrame(animateCanvas);
+            requestAnimationFrame(animateSparkles);
         }
-        animateCanvas();
-
-        // --- FLOATING TEDDY BEARS & HEARTS SYSTEM ---
-        const floatIcons = ['🧸', '🩷', '💜', '💛', '🩵', '🤎', '✨', '🌸', '🎀', '💖'];
-
-        function createFloatingItem() {
-            const container = document.body;
-            const item = document.createElement('div');
-            item.className = 'floating-item';
-            item.innerText = floatIcons[Math.floor(Math.random() * floatIcons.length)];
-            
-            const startX = Math.random() * 95; // % width
-            const duration = Math.random() * 6 + 6; // 6s - 12s
-            const size = Math.random() * 1.5 + 1.2; // rem
-
-            item.style.left = `${startX}vw`;
-            item.style.fontSize = `${size}rem`;
-            item.style.animationDuration = `${duration}s`;
-
-            container.appendChild(item);
-
-            setTimeout(() => {
-                item.remove();
-            }, duration * 1000);
-        }
-
-        // Spawn floating items periodically
-        setInterval(createFloatingItem, 800);
-
-        // --- PASSWORD VALIDATION LOGIC ---
-        function checkPassword() {
-            const input = document.getElementById('password-input');
-            const lockScreen = document.getElementById('lock-screen');
-            const errorMsg = document.getElementById('error-msg');
-            const val = input.value.trim().toLowerCase();
-
-            if (VALID_PASSWORDS.includes(val)) {
-                // Correct Password!
-                errorMsg.classList.add('hidden');
-                
-                // Trigger celebratory confetti
-                fireConfetti();
-
-                // Unlock sequence animation
-                lockScreen.classList.add('scale-95', 'opacity-0');
-                
-                setTimeout(() => {
-                    lockScreen.classList.add('hidden');
-                    revealCard();
-                }, 600);
-
-                // Auto-play background music if possible
-                playMusic();
-
-            } else {
-                // Incorrect Password!
-                errorMsg.innerText = "Sai mật khẩu rồi nè, thử lại đi bé ơi! 💕 (Gợi ý: 2010)";
-                errorMsg.classList.remove('hidden');
-                
-                // Trigger shake effect
-                lockScreen.classList.remove('animate-shake');
-                void lockScreen.offsetWidth; // Trigger reflow
-                lockScreen.classList.add('animate-shake');
-
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        }
-
-        function togglePasswordVisibility() {
-            const input = document.getElementById('password-input');
-            const icon = document.getElementById('eye-icon');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.className = 'fas fa-eye-slash';
-            } else {
-                input.type = 'password';
-                icon.className = 'fas fa-eye';
-            }
-        }
-
-        // --- REVEAL CARD SCREEN ---
-        function revealCard() {
-            const cardScreen = document.getElementById('card-screen');
-            const topControls = document.getElementById('top-controls');
-
-            cardScreen.classList.remove('hidden');
-            topControls.classList.remove('opacity-0', 'pointer-events-none');
-
-            setTimeout(() => {
-                cardScreen.classList.remove('opacity-0', 'scale-95');
-                cardScreen.classList.add('opacity-100', 'scale-100');
-            }, 50);
-
-            // Continuously spawn extra floating items upon reveal
-            for(let i=0; i<10; i++) {
-                setTimeout(createFloatingItem, i * 200);
-            }
-        }
-
-        // --- CELEBRATION EFFECTS (Confetti & Spawns) ---
-        function fireConfetti() {
-            const count = 200;
-            const defaults = {
-                origin: { y: 0.7 }
-            };
-
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
-            }
-
-            fire(0.25, {
-                spread: 26,
-                startVelocity: 55,
-                colors: ['#ff85a1', '#fbb1bd']
-            });
-            fire(0.2, {
-                spread: 60,
-                colors: ['#f72585', '#7209b7']
-            });
-            fire(0.35, {
-                spread: 100,
-                decay: 0.91,
-                scalar: 0.8
-            });
-            fire(0.1, {
-                spread: 120,
-                startVelocity: 25,
-                decay: 0.92,
-                colors: ['#ffe3e0', '#ffd1dc']
-            });
-            fire(0.1, {
-                spread: 120,
-                startVelocity: 45,
-            });
-        }
-
-        function spawnBurst() {
-            fireConfetti();
-            for(let i = 0; i < 15; i++) {
-                setTimeout(createFloatingItem, i * 100);
-            }
-        }
-
-        function replayGreeting() {
-            fireConfetti();
-            const cardScreen = document.getElementById('card-screen');
-            cardScreen.classList.add('scale-95');
-            setTimeout(() => {
-                cardScreen.classList.remove('scale-95');
-            }, 300);
-        }
-
-        // --- AUDIO CONTROLLER ---
-        function playMusic() {
-            bgMusic.play().then(() => {
-                isMusicPlaying = true;
-                updateMusicUI();
-            }).catch(err => {
-                console.log("Audio autoplay restricted by browser. User interaction needed.");
-                isMusicPlaying = false;
-                updateMusicUI();
-            });
-        }
-
-        function toggleMusic() {
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                isMusicPlaying = false;
-            } else {
-                bgMusic.play();
-                isMusicPlaying = true;
-            }
-            updateMusicUI();
-        }
-
-        function updateMusicUI() {
-            const icon = document.getElementById('music-icon');
-            const text = document.getElementById('music-text');
-            if (isMusicPlaying) {
-                icon.className = 'fas fa-compact-disc text-lg animate-spin';
-                text.innerText = 'Nhạc Bật';
-            } else {
-                icon.className = 'fas fa-music text-lg';
-                text.innerText = 'Nhạc Tắt';
-            }
-        }
-
-        // --- INTERACTIVE BEAR MODAL MESSAGES ---
-        function bearClick(msg, emoji) {
-            const modal = document.getElementById('msg-modal');
-            const modalBox = document.getElementById('msg-modal-box');
-            document.getElementById('modal-text').innerText = msg;
-            document.getElementById('modal-icon').innerText = emoji;
-
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modalBox.classList.remove('scale-90');
-            modalBox.classList.add('scale-100');
-
-            // Also burst small particles
-            confetti({
-                particleCount: 30,
-                spread: 50,
-                origin: { y: 0.6 }
-            });
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('msg-modal');
-            const modalBox = document.getElementById('msg-modal-box');
-
-            modalBox.classList.remove('scale-100');
-            modalBox.classList.add('scale-90');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        // Click anywhere to spawn a glowing heart effect
-        document.addEventListener('click', (e) => {
-            // Ignore button/input clicks
-            if (e.target.closest('button') || e.target.closest('input')) return;
-
-            const heart = document.createElement('div');
-            heart.innerText = '💖';
-            heart.style.position = 'fixed';
-            heart.style.left = `${e.clientX - 12}px`;
-            heart.style.top = `${e.clientY - 12}px`;
-            heart.style.fontSize = '1.5rem';
-            heart.style.pointerEvents = 'none';
-            heart.style.zIndex = '9999';
-            heart.style.transition = 'all 0.8s ease-out';
-
-            document.body.appendChild(heart);
-
-            requestAnimationFrame(() => {
-                heart.style.transform = 'translateY(-40px) scale(1.4)';
-                heart.style.opacity = '0';
-            });
-
-            setTimeout(() => heart.remove(), 800);
-        });
+        animateSparkles();
     </script>
 </body>
 </html>
