@@ -155,14 +155,9 @@
     <div id="click-spawn-layer" class="fixed inset-0 pointer-events-none z-20"></div>
 
     <!-- Background Music Audio (Lo-fi Soft Piano Romantic Track) -->
-    <iframe
-        width="300"
-        height="80"
-        src="https://www.youtube.com/embed/7o5XAg_EeLw"
-        title="I Do - 911"
-        allow="autoplay; encrypted-media"
-        style="position: fixed; bottom: 10px; right: 10px; z-index: 1000; border: none;">
-    </iframe>
+    <audio id="bg-music" loop preload="auto">
+        <source src="romantic.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Top Music & Interactive Controls (Visible After Unlocking) -->
     <div id="top-controls" class="fixed top-4 right-4 z-40 flex items-center gap-2 opacity-0 transition-opacity duration-700 pointer-events-none">
